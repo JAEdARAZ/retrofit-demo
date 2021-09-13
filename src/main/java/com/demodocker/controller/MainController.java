@@ -19,35 +19,32 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @RestController
 public class MainController {
 
-	@Value("${tmdb.api.key}")
-	private String apiKey;
-	
-	@GetMapping("/main")
-	public String getHelloWorld() {
-		return "hey boy how is it going";
-	}
+    @Value("${tmdb.api.key}")
+    private String apiKey;
 
-	@GetMapping("/movies/{movieId}")
-	public Movie getMovie(@PathVariable String movieId) {
-		OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-		Retrofit retrofit = new Retrofit.Builder()
-		  .baseUrl("https://api.themoviedb.org/")
-		  .addConverterFactory(GsonConverterFactory.create())
-		  .client(httpClient.build())
-		  .build();
-		
-		MoviesClient service = retrofit.create(MoviesClient.class);
-		Call<Movie> callSync = service.getMovie(movieId, apiKey);
+    @GetMapping("/main")
+    public String getHelloWorld() {
+        return "hey boy how is it going";
+    }
 
-		try {
-			Response<Movie> response;
-			response = callSync.execute();
-			return response.body();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
+    @GetMapping("/movies/{movieId}")
+    public Movie getMovie(@PathVariable String movieId) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.themoviedb.org/")
+                .addConverterFactory(GsonConverterFactory.create()).client(httpClient.build()).build();
+
+        MoviesClient service = retrofit.create(MoviesClient.class);
+        Call<Movie> callSync = service.getMovie(movieId, apiKey);
+
+        try {
+            Response<Movie> response;
+            response = callSync.execute();
+            return response.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
 }
