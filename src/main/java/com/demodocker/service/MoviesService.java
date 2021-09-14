@@ -2,6 +2,7 @@ package com.demodocker.service;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +19,9 @@ public class MoviesService implements IMoviesService {
 
     @Value("${tmdb.api.key}")
     private String apiKey;
-
-    @Value("${tmdb.baseurl}")
-    private String tmdbBaseUrl;
+    
+    @Autowired
+    MoviesClient moviesClient;
 
     @Override
     public Movie getMovie(@PathVariable String movieId) {
