@@ -7,13 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.demodocker.model.Movie;
+import com.demodocker.retrofit.RetrofitClientGenerator;
 import com.demodocker.retrofit.client.MoviesClient;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 @Service
 public class MoviesService implements IMoviesService {
@@ -26,12 +24,8 @@ public class MoviesService implements IMoviesService {
 
     @Override
     public Movie getMovie(@PathVariable String movieId) {
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(tmdbBaseUrl)
-                .addConverterFactory(GsonConverterFactory.create()).client(httpClient.build()).build();
-
-        MoviesClient service = retrofit.create(MoviesClient.class);
-        Call<Movie> callSync = service.getMovie(movieId, apiKey);
+        MoviesClient moviesClient = RetrofitClientGenerator.createService(MoviesClient.class);
+        Call<Movie> callSync = moviesClient.getMovie(movieId, apiKey);
 
         try {
             Response<Movie> response;
