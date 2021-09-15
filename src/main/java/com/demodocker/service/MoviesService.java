@@ -1,18 +1,13 @@
 package com.demodocker.service;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.demodocker.model.Movie;
-import com.demodocker.retrofit.RetrofitClientGenerator;
+import com.demodocker.retrofit.GenericCallRetrofit;
 import com.demodocker.retrofit.client.MoviesClient;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 @Service
 public class MoviesService implements IMoviesService {
@@ -25,18 +20,6 @@ public class MoviesService implements IMoviesService {
 
     @Override
     public Movie getMovie(@PathVariable String movieId) {
-        MoviesClient moviesClient = RetrofitClientGenerator.createService(MoviesClient.class);
-        Call<Movie> callSync = moviesClient.getMovie(movieId, apiKey);
-
-        try {
-            Response<Movie> response;
-            response = callSync.execute();
-            return response.body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new Movie();
+        return GenericCallRetrofit.request(moviesClient.getMovie(movieId, apiKey));
     }
-
 }
