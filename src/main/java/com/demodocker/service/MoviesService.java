@@ -11,7 +11,6 @@ import com.demodocker.retrofit.client.MoviesClient;
 
 @Service
 public class MoviesService implements IMoviesService {
-
     @Value("${tmdb.api.key}")
     private String apiKey;
     

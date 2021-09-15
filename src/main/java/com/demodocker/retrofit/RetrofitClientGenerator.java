@@ -21,17 +21,19 @@ public class RetrofitClientGenerator {
     private static HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-    public static <S> S createService(Class<S> serviceClass, Retrofit retrofit) {
+    public static <S> S createService(Class<S> serviceClass, Retrofit.Builder builder, Retrofit retrofit) {
         if (!httpClient.interceptors().contains(logging)) {
             httpClient.addInterceptor(logging);
+            builder.client(httpClient.build());
+            retrofit = builder.build();
         }
         return retrofit.create(serviceClass);
     }
 
     @Bean
     public MoviesClient moviesClient() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL_TMDB).client(httpClient.build())
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        return createService(MoviesClient.class, retrofit);
+        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(BASE_URL_TMDB).client(httpClient.build())
+                .addConverterFactory(GsonConverterFactory.create());
+        return createService(MoviesClient.class, builder, builder.build());
     }
 }
