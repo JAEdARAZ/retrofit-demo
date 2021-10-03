@@ -13,4 +13,5 @@ target/
 .springBeans
 .sts4-cache
 
-.mvn/
+.mvn
+docker-compose.yml
